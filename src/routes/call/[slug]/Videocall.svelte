@@ -81,14 +81,14 @@
 <div class="flex h-full w-full flex-1 flex-col">
 	<div
 		style={!inSession ? 'display: none;' : 'display: flex;'}
-		class="flex h-[80vh] w-[80vw] overflow-hidden self-center margin-auto"
+		class="flex max-h-[75vh] w-[80vw] overflow-hidden self-center margin-auto"
 	>
 		<video-player-container bind:this={videoContainer}></video-player-container>
 	</div>
 	{#if !inSession}
 		<div class="mx-auto flex w-64 flex-col self-center">
 			<button
-				class="bg-blue-500 text-white font-bold py-2 px-4 rounded mb-4 w-64 self-center"
+				class={`${!disableStart ? 'bg-blue-500' : 'bg-gray-300'} text-white font-bold py-2 px-4 rounded mb-4 w-64 self-center`}
 				on:click={startCall}
 				disabled={disableStart}
 			>
