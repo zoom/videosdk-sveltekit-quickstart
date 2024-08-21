@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import ZoomVideo, { type VideoPlayer, VideoQuality } from '@zoom/videosdk';
-	import { useWorkAroundForSafari } from '$lib';
 
 	export let JWT: string;
 	export let slug: string;
@@ -23,8 +22,7 @@
 		client.on('peer-video-state-change', renderVideo);
 		await client.join(slug, JWT, username);
 		const mediaStream = client.getMediaStream();
-		// @ts-expect-error window.safari only exists on safari
-		window.safari ? await useWorkAroundForSafari(client) : await mediaStream.startAudio();
+		await mediaStream.startAudio();
 		await mediaStream.startVideo();
 		await renderVideo({ action: 'Start', userId: client.getCurrentUserInfo().userId });
 		inSession = true;
