@@ -2,15 +2,14 @@
 	import { onMount } from 'svelte';
 	import ZoomVideo, { type VideoPlayer, VideoQuality } from '@zoom/videosdk';
 
-	export let JWT: string;
-	export let slug: string;
+	let { JWT, slug } = $props();
 
 	const username = `User-${String(new Date().getTime()).slice(6)}`;
 	const client = ZoomVideo.createClient();
-	let disableStart = false;
-	let inSession = false;
-	let audioMuted = false;
-	let videoMuted = false;
+	let disableStart = $state(false);
+	let inSession = $state(false);
+	let audioMuted = $state(false);
+	let videoMuted = $state(false);
 	let videoContainer: HTMLElement;
 
 	onMount(async () => {
@@ -35,7 +34,11 @@
 		const mediaStream = client.getMediaStream();
 		if (event.action === 'Stop') {
 			const element = await mediaStream.detachVideo(event.userId);
-			Array.isArray(element) ? element.forEach((el) => el.remove()) : element.remove();
+			if (Array.isArray(element)) {
+				element.forEach((el) => el.remove());
+			} else {
+				element.remove();
+			}
 		} else {
 			const userVideo = await mediaStream.attachVideo(event.userId, VideoQuality.Video_360P);
 			videoContainer?.appendChild(userVideo as VideoPlayer);
@@ -46,7 +49,11 @@
 		const mediaStream = client.getMediaStream();
 		for (const user of client.getAllUser()) {
 			const element = await mediaStream.detachVideo(user.userId);
-			Array.isArray(element) ? element.forEach((el) => el.remove()) : element.remove();
+			if (Array.isArray(element)) {
+				element.forEach((el) => el.remove());
+			} else {
+				element.remove();
+			}
 		}
 		client.off('peer-video-state-change', renderVideo);
 		await client.leave();
@@ -79,15 +86,15 @@
 <div class="flex h-full w-full flex-1 flex-col">
 	<div
 		style={!inSession ? 'display: none;' : 'display: flex;'}
-		class="flex max-h-[75vh] w-[80vw] overflow-hidden self-center margin-auto"
+		class="margin-auto flex h-[75vh] w-[80vw] self-center overflow-hidden"
 	>
 		<video-player-container bind:this={videoContainer}></video-player-container>
 	</div>
 	{#if !inSession}
 		<div class="mx-auto flex w-64 flex-col self-center">
 			<button
-				class={`${!disableStart ? 'bg-blue-500' : 'bg-gray-300'} text-white font-bold py-2 px-4 rounded mb-4 w-64 self-center`}
-				on:click={startCall}
+				class={`${!disableStart ? 'bg-blue-500' : 'bg-gray-300'} mb-4 w-64 self-center rounded px-4 py-2 font-bold text-white`}
+				onclick={startCall}
 				disabled={disableStart}
 			>
 				Join
@@ -95,8 +102,8 @@
 		</div>
 	{:else}
 		<div class="flex w-full flex-col justify-around self-center">
-			<div class="flex flex-row self-center m-2">
-				<button on:click={toggleVideo} class="bg-blue-500 text-white font-bold py-2 px-4 rounded mx-2 w-64 self-center">
+			<div class="m-2 flex flex-row self-center">
+				<button onclick={toggleVideo} class="mx-2 w-64 self-center rounded bg-blue-500 px-4 py-2 font-bold text-white">
 					<p>
 						{#if videoMuted}
 							Unmute Video
@@ -105,7 +112,7 @@
 						{/if}
 					</p>
 				</button>
-				<button on:click={toggleAudio} class="bg-blue-500 text-white font-bold py-2 px-4 rounded mx-2 w-64 self-center">
+				<button onclick={toggleAudio} class="mx-2 w-64 self-center rounded bg-blue-500 px-4 py-2 font-bold text-white">
 					<p>
 						{#if audioMuted}
 							Unmute Audio
@@ -114,7 +121,7 @@
 						{/if}
 					</p>
 				</button>
-				<button on:click={leaveCall} class="bg-blue-500 text-white font-bold py-2 px-4 rounded mx-2 w-64 self-center">
+				<button onclick={leaveCall} class="mx-2 w-64 self-center rounded bg-blue-500 px-4 py-2 font-bold text-white">
 					<p>Leave</p>
 				</button>
 			</div>
