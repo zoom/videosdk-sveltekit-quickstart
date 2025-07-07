@@ -32,7 +32,7 @@
   "type": "module",
   "dependencies": {
     "@types/jsrsasign": "^10.5.14",
-    "@zoom/videosdk": "^1.11.10",
+    "@zoom/videosdk": "^2.2.0",
     "autoprefixer": "^10.4.19",
     "jsrsasign": "^11.1.0",
     "postcss": "^8.4.39",

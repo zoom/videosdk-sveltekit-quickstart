@@ -7,7 +7,7 @@
 </script>
 
 <div class="flex flex-col">
-	<h1 class="text-3xl font-bold text-center my-4">Zoom VideoSDK Vue/Nuxt Quickstart</h1>
+	<h1 class="text-3xl font-bold text-center my-4">Zoom VideoSDK Sveltekit Quickstart</h1>
 	<div class="flex self-center flex-col">
 		<input
 			type="text"
