@@ -16,7 +16,10 @@
 			bind:value={slug}
 		/>
 		<br />
-		<button class="mb-4 w-64 self-center rounded bg-blue-500 px-4 py-2 font-bold text-white" onclick={handleClick}>
+		<button
+			class="mb-4 w-64 cursor-pointer self-center rounded bg-blue-500 px-4 py-2 font-bold text-white"
+			onclick={handleClick}
+		>
 			Create
 		</button>
 	</div>

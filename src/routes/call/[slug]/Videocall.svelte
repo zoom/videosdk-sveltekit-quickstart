@@ -49,10 +49,14 @@
 		const mediaStream = client.getMediaStream();
 		for (const user of client.getAllUser()) {
 			const element = await mediaStream.detachVideo(user.userId);
-			if (Array.isArray(element)) {
-				element.forEach((el) => el.remove());
-			} else {
-				element.remove();
+			try {
+				if (Array.isArray(element)) {
+					element.forEach((el) => el.remove());
+				} else {
+					element.remove();
+				}
+			} catch (e) {
+				console.log(e);
 			}
 		}
 		client.off('peer-video-state-change', renderVideo);
@@ -93,7 +97,7 @@
 	{#if !inSession}
 		<div class="mx-auto flex w-64 flex-col self-center">
 			<button
-				class={`${!disableStart ? 'bg-blue-500' : 'bg-gray-300'} mb-4 w-64 self-center rounded px-4 py-2 font-bold text-white`}
+				class={`${!disableStart ? 'bg-blue-500' : 'bg-gray-300'} mb-4 w-64 cursor-pointer self-center rounded px-4 py-2 font-bold text-white`}
 				onclick={startCall}
 				disabled={disableStart}
 			>
@@ -103,7 +107,10 @@
 	{:else}
 		<div class="flex w-full flex-col justify-around self-center">
 			<div class="m-2 flex flex-row self-center">
-				<button onclick={toggleVideo} class="mx-2 w-64 self-center rounded bg-blue-500 px-4 py-2 font-bold text-white">
+				<button
+					onclick={toggleVideo}
+					class="mx-2 w-64 cursor-pointer self-center rounded bg-blue-500 px-4 py-2 font-bold text-white"
+				>
 					<p>
 						{#if videoMuted}
 							Unmute Video
@@ -112,7 +119,10 @@
 						{/if}
 					</p>
 				</button>
-				<button onclick={toggleAudio} class="mx-2 w-64 self-center rounded bg-blue-500 px-4 py-2 font-bold text-white">
+				<button
+					onclick={toggleAudio}
+					class="mx-2 w-64 cursor-pointer self-center rounded bg-blue-500 px-4 py-2 font-bold text-white"
+				>
 					<p>
 						{#if audioMuted}
 							Unmute Audio
@@ -121,7 +131,10 @@
 						{/if}
 					</p>
 				</button>
-				<button onclick={leaveCall} class="mx-2 w-64 self-center rounded bg-blue-500 px-4 py-2 font-bold text-white">
+				<button
+					onclick={leaveCall}
+					class="mx-2 w-64 cursor-pointer self-center rounded bg-blue-500 px-4 py-2 font-bold text-white"
+				>
 					<p>Leave</p>
 				</button>
 			</div>
